@@ -1,6 +1,6 @@
 package com.stockyourfridge.stockyourfridge.model;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,5 +29,5 @@ public class Aisle {
 	private Fridge fridge;
 	
 	@OneToMany(mappedBy = "aisle")
-	private Set<Item> items;
+	private List<Item> items;
 }
