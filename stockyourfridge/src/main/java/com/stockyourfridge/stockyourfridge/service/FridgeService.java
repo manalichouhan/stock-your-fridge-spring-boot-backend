@@ -102,4 +102,38 @@ public class FridgeService {
 		log.debug("Saving in repo");
 		fridgeRepository.save(fridge);
 	}
+
+	public void deleteFridge(long fridgeId) {
+		log.debug("Deleting fridge with id : " + fridgeId);
+		
+		fridgeRepository.deleteById(fridgeId);
+	}
+
+	public FridgeDto updateFridge(FridgeDto fridgeDto) throws Exception {
+		
+		log.debug("Updating fridge with dto : " + fridgeDto);
+		
+		User owner = userRepository.findByUserName(fridgeDto.getOwner())
+						.orElseThrow(() -> new Exception("UserName " + fridgeDto.getOwner() + " not found."));
+		
+		Fridge toUpdateFridge = Fridge.builder()
+									.fridgeId(fridgeDto.getFridgeId())
+									.name(fridgeDto.getName())
+									.owner(owner)
+									.isFull(fridgeDto.isFull())
+									.build();
+		
+		Fridge updatedFridge = fridgeRepository.save(toUpdateFridge);
+		
+		FridgeDto savedFridgeDto = FridgeDto.builder()
+				.fridgeId(updatedFridge.getFridgeId())
+				.name(updatedFridge.getName())
+				.owner(updatedFridge.getOwner().getUserName())
+				.isFull(updatedFridge.isFull())
+				.build();
+		
+		log.debug("Updated fridge dto : " + savedFridgeDto);
+		
+		return savedFridgeDto;
+	}
 }

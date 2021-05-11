@@ -3,6 +3,7 @@ package com.stockyourfridge.stockyourfridge.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +34,18 @@ public class FridgeController {
 		return fridgeService.getFridgesByOwner(owner);
 	}
 	
+	@DeleteMapping("/{fridgeId}")
+	public ResponseEntity<String> deleteFridge(@PathVariable long fridgeId) {
+		fridgeService.deleteFridge(fridgeId);
+		
+		return ResponseEntity.ok("Fridge with id : " + fridgeId + " has been deleted successfully.");
+	}
+	
+	@PutMapping
+	public FridgeDto updateFridge(@RequestBody FridgeDto fridgeDto) throws Exception {
+		return fridgeService.updateFridge(fridgeDto);
+	}
+	
 	@PutMapping("/subscribe/userName/{userName}/fridgeId/{fridgeId}")
 	public ResponseEntity<String> subscribeToFridge(@PathVariable String userName, @PathVariable long fridgeId) throws Exception {
 		
@@ -41,4 +54,11 @@ public class FridgeController {
 		return ResponseEntity.ok("User : " + userName + " successfully subscribed to fridge : " + fridgeId);
 	}
 	
+	//TODO unsubscribe fridge
+	//TODO get subscribed fridges
+	//TODO get subscribers for fridge
+	//TODO get owner for fridge
+	//TODO remove subscriber from fridge
+	//TODO custom exception
+	//TODO unit testing
 }
