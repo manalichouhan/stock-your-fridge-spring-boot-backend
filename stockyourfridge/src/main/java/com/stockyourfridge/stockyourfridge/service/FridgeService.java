@@ -116,6 +116,10 @@ public class FridgeService {
 		User owner = userRepository.findByUserName(fridgeDto.getOwner())
 						.orElseThrow(() -> new UserNotFoundException(fridgeDto.getOwner()));
 		
+		// check if fridge exists in db
+		fridgeRepository.findById(fridgeDto.getFridgeId())
+						.orElseThrow(() -> new FridgeNotFoundException(fridgeDto.getFridgeId()));
+		
 		Fridge toUpdateFridge = Fridge.builder()
 									.fridgeId(fridgeDto.getFridgeId())
 									.name(fridgeDto.getName())
