@@ -20,6 +20,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class GlobalExceptionHandler {
 
+	// handling fridge not found exception
+	@ExceptionHandler(FridgeNotFoundException.class)
+	public ResponseEntity<?> userNotFoundExceptionHandling(FridgeNotFoundException exception, WebRequest request) {
+		log.error("FridgeNotFoundException: " + exception.getMessage());
+		Date date = new Date();
+		ErrorDetails errorDetails = new ErrorDetails(date, exception.getMessage(),
+				request.getDescription(false));
+		return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+	}
+	
 	// handling user not found exception
 	@ExceptionHandler(UserNotFoundException.class)
 	public ResponseEntity<?> userNotFoundExceptionHandling(UserNotFoundException exception, WebRequest request) {
@@ -27,7 +37,7 @@ public class GlobalExceptionHandler {
 		Date date = new Date();
 		ErrorDetails errorDetails = new ErrorDetails(date, exception.getMessage(),
 				request.getDescription(false));
-		return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
 	}
 	
 	// handling global exception

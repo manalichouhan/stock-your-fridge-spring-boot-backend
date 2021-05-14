@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 
 import com.stockyourfridge.stockyourfridge.dto.FridgeDto;
+import com.stockyourfridge.stockyourfridge.exception.FridgeNotFoundException;
 import com.stockyourfridge.stockyourfridge.exception.UserNotFoundException;
 import com.stockyourfridge.stockyourfridge.model.Fridge;
 import com.stockyourfridge.stockyourfridge.model.User;
@@ -71,7 +72,7 @@ public class FridgeService {
 		log.debug("Getting fridges for userName : " + userName);
 		
 		User owner = userRepository.findByUserName(userName)
-						.orElseThrow(() -> new Exception("User not found with userName : " + userName));
+						.orElseThrow(() -> new UserNotFoundException(userName));
 		
 		List<Fridge> fridgesByOwner = fridgeRepository.findByOwner(owner);
 		List<FridgeDto> mappedFridgesByOwner = mapFridgesToFridgeDtos(fridgesByOwner);
@@ -83,12 +84,12 @@ public class FridgeService {
 
 	public void subscribeToFridge(String userName, long fridgeId) throws Exception {
 		Fridge fridge = fridgeRepository.findById(fridgeId)
-				.orElseThrow(() -> new Exception("Fridge with fridgeId " + fridgeId + " not found."));
+				.orElseThrow(() -> new FridgeNotFoundException(fridgeId));
 		
 		log.debug("Found fridge");
 		
 		User user = userRepository.findByUserName(userName)
-				.orElseThrow(() -> new Exception("User with userName " + userName + " not found."));
+				.orElseThrow(() -> new UserNotFoundException(userName));
 		
 		log.debug("Found user");
 		
@@ -113,7 +114,7 @@ public class FridgeService {
 		log.debug("Updating fridge with dto : " + fridgeDto);
 		
 		User owner = userRepository.findByUserName(fridgeDto.getOwner())
-						.orElseThrow(() -> new Exception("UserName " + fridgeDto.getOwner() + " not found."));
+						.orElseThrow(() -> new UserNotFoundException(fridgeDto.getOwner()));
 		
 		Fridge toUpdateFridge = Fridge.builder()
 									.fridgeId(fridgeDto.getFridgeId())
