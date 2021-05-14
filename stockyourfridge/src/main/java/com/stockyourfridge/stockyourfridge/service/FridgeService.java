@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 
 import com.stockyourfridge.stockyourfridge.dto.FridgeDto;
+import com.stockyourfridge.stockyourfridge.exception.UserNotFoundException;
 import com.stockyourfridge.stockyourfridge.model.Fridge;
 import com.stockyourfridge.stockyourfridge.model.User;
 import com.stockyourfridge.stockyourfridge.repository.FridgeRepository;
@@ -25,12 +26,10 @@ public class FridgeService {
 
 	public FridgeDto addFridge(FridgeDto fridgeDto) throws Exception {
 		log.debug("Received fridgeDto : " + fridgeDto);
-		
-		//TODO create custom exception for user not found
-		//OR
+
 		//TODO use current user as owner
 		User owner = userRepository.findByUserName(fridgeDto.getOwner())
-				.orElseThrow(() -> new Exception("Owner " + fridgeDto.getOwner() + " not found."));
+				.orElseThrow(() -> new UserNotFoundException(fridgeDto.getOwner()));
 		
 		Fridge toSaveFridge = Fridge.builder()
 									.name(fridgeDto.getName())
