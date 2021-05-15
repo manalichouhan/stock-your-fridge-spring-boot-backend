@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.stockyourfridge.stockyourfridge.dto.AuthenticationResponse;
+import com.stockyourfridge.stockyourfridge.dto.LoginRequest;
 import com.stockyourfridge.stockyourfridge.dto.RegisterRequest;
 import com.stockyourfridge.stockyourfridge.service.AuthService;
 
@@ -24,6 +26,12 @@ public class AuthController {
 		return new ResponseEntity<>("User Registration Successful", 
 				HttpStatus.OK);
 	}
+	
+	@PostMapping("/login")
+	public AuthenticationResponse login(@RequestBody LoginRequest loginRequest) {
+		return authService.login(loginRequest);
+	}
+
 	
 
 }
